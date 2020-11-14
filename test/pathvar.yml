@@ -1,0 +1,13 @@
+---
+    # configpath:
+    #     - /etc/filebeat/filebeat.yml
+    #     - /etc/auditbeat/auditbeat.yml
+    - name: pathtest
+      
+      tasks:
+        path: {item.name}
+
+      with_items:
+         - /etc/filebeat/filebeat.yml
+         - /etc/auditbeat/auditbeat.yml
+

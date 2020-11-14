@@ -1,0 +1,16 @@
+---
+    - name: Change configuration files of Filebeat,Metricbeat,Auditbeat
+      hosts: nodes
+      become: yes
+
+
+      tasks:
+        - name: Show configuration Path
+          debug:
+            msg: "{{ item }}"
+
+
+          with_items:
+            - /etc/filebeat/filebeat.yml
+            - /etc/auditbeat/auditbeat.yml
+  

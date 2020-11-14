@@ -1,0 +1,49 @@
+---
+    - name: Change configuration files of Filebeat,Metricbeat,Auditbeat
+      hosts: nodes
+      become: yes
+      vars:
+        testpath:
+          - { name: /etc/auditbeat/auditbeat.yml }
+        configparameter:
+          - { From: '#name', To: 'name: hostname'}
+          - { From: '#tags: ', To: 'tags: ["rhel-sftp-filebeat"]'}
+          - { From: '#fields', To: 'fields'}
+          - { From: '#  env: staging', To: '  env: Production'}
+          - { From: '  #host: "localhost:5601"', To: '  host: "http://192.168.56.2:5601"'}
+          - { From: '  hosts: \["localhost:9200"\]', To: '  hosts: ["192.168.56.2:9200"]'}
+          - { From: '  #username: "elastic', To: '  username: "elastic'}
+          - { From: '  #password: "changeme"', To: '  password: "changeme"'}
+
+
+
+
+      tasks:
+        - name: check for database instance project
+          command: projects -l "db_{{ item.key }}"
+          with_dict: "{{ db_instances }}"
+          register: proj
+          ignore_errors: yes
+          always_run: yes
+        # - name: Change configuration file of Filebeat, enabling System module and Setup Filebeat
+        # #   tags: Filebeat
+        #   debug:
+
+        #     # msg: "{{ item.From }} is {{ item.To }}"
+        #     msg: "{{ item.name }}"
+
+
+          # lineinfile: 
+          #   # path: "/etc/auditbeat/auditbeat.yml"
+          #   path: "{{ item.Pathname }}"
+          #   regexp: "{{item.From}}"
+          #   line: "{{item.To}}"
+          #   state: present 
+          #   backrefs: yes
+
+
+
+          with_items:
+            - "{{testpath}}"
+            - "{{configparameter}}"
+

@@ -1,0 +1,38 @@
+---
+    - name: Change configuration files of Filebeat,Metricbeat,Auditbeat
+      hosts: nodes
+      become: yes
+
+      tasks:
+        - name: Import path variable.
+          include_vars:
+            file: ./pathvar.yml
+            name: vardata
+
+        - name: debuging the expected data
+          debug:
+            msg: "{{ vardata.item.name }}"
+
+        # - name: Change configuration file of Filebeat, enabling System module and Setup Filebeat
+        #   tags: Filebeat
+        #   lineinfile: 
+        #     path: "{{ vardata.configpath }}"
+        #     # Line to Search/Match against
+        #     regexp: '{{ item.From }}'
+        #     # Line to Replace with
+        #     line: '{{ item.To }}'
+        #     state: present 
+        #     # To validate the Changes Before Committing/Saving
+        #     # validate: "filebeat test config %s"
+        #     backrefs: yes
+
+
+        #   with_items: 
+        #     - { From: '#name', To: 'name: hostname'}
+        #     - { From: '#tags: ', To: 'tags: ["rhel-sftp-filebeat"]'}
+        #     - { From: '#fields', To: 'fields'}
+        #     - { From: '#  env: staging', To: '  env: Production'}
+        #     - { From: '  #host: "localhost:5601"', To: '  host: "http://192.168.56.2:5601"'}
+        #     - { From: '  hosts: \["localhost:9200"\]', To: '  hosts: ["192.168.56.2:9200"]'}
+        #     - { From: '  #username: "elastic', To: '  username: "elastic'}
+        #     - { From: '  #password: "changeme"', To: '  password: "changeme"'}
