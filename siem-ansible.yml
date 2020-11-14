@@ -18,14 +18,15 @@
             backrefs: yes
           with_items: 
             - { From: '#name', To: 'name: hostname'}
-            # - { From: '#tags: ["service-X", "web-tier"]', To: 'tags: ["rhel-sftp-filebeat"]'}
+            - { From: '#tags: ', To: 'tags: ["rhel-sftp-filebeat"]'}
             - { From: '#fields', To: 'fields'}
             - { From: '#  env: staging', To: '  env: Production'}
             - { From: '  #host: "localhost:5601"', To: '  host: "http://192.168.56.2:5601"'}
-            - { From: '  hosts: ["localhost:9200"]', To: '  hosts: ["192.168.56.2:9200"]'}
+            - { From: '  hosts: \["localhost:9200"\]', To: '  hosts: ["192.168.56.2:9200"]'}
             - { From: '  #username: "elastic', To: '  username: "elastic'}
             - { From: '  #password: "changeme"', To: '  password: "changeme"'}
-           
+
+            
 
 
 
