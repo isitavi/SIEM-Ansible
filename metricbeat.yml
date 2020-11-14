@@ -17,22 +17,27 @@
             # To validate the Changes Before Committing/Saving
             # validate: "filebeat test config %s"
             backrefs: yes
+          when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
         - name: Enable Metricbeat System Module
           command: metricbeat modules enable system
+          when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
         - name: Set up Metricbeat assets
           command: metricbeat setup 
+          when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
         - name: Enable service metricbeat
           service:
            name: metricbeat
            enabled: yes
+          when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
           
         - name: Restart service metricbeat, in all cases
           service:
             name: metricbeat
             state: restarted
+          when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
           with_items: 
             - { From: '#name', To: 'name: hostname'}
