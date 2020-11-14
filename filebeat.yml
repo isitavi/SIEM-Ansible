@@ -4,7 +4,7 @@
       become: yes
 
       tasks:
-        - name: Change configuration file of Filebeat, enabling System module and Setup Filebeat
+        - name: Change configuration file of Filebeat
           tags: Filebeat
           lineinfile: 
             # path: "{{ pathdir }}"
@@ -18,6 +18,21 @@
             # validate: "filebeat test config %s"
             backrefs: yes
 
+        - name: Enable Filebeat System Module
+          command: filebeat modules enable system
+
+        - name: Set up Filebeat assets
+          command: filebeat setup 
+
+        - name: Enable service filebeat
+          service:
+           name: filebeat
+           enabled: yes
+          
+        - name: Restart service filebeat, in all cases
+          service:
+            name: filebeat
+            state: restarted
 
           with_items: 
             - { From: '#name', To: 'name: hostname'}
