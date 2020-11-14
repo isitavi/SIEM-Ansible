@@ -1,0 +1,69 @@
+---
+    - name: Change configuration files of Metricbeat
+      hosts: nodes
+      become: yes
+
+      tasks:
+        - name: Change configuration file of Metricbeat
+          tags: Filebeat
+          lineinfile: 
+            # path: "{{ pathdir }}"
+            path: "/etc/metricbeat/metricbeat.yml"
+            # Line to Search/Match against
+            regexp: '{{ item.From }}'
+            # Line to Replace with
+            line: '{{ item.To }}'
+            state: present 
+            # To validate the Changes Before Committing/Saving
+            # validate: "filebeat test config %s"
+            backrefs: yes
+
+        - name: Enable Metricbeat System Module
+          command: metricbeat modules enable system
+
+        - name: Set up Metricbeat assets
+          command: metricbeat setup 
+
+        - name: Enable service metricbeat
+          service:
+           name: metricbeat
+           enabled: yes
+          
+        - name: Restart service metricbeat, in all cases
+          service:
+            name: metricbeat
+            state: restarted
+
+          with_items: 
+            - { From: '#name', To: 'name: hostname'}
+            - { From: '#tags: ', To: 'tags: ["rhel-sftp-filebeat"]'}
+            - { From: '#fields', To: 'fields'}
+            - { From: '#  env: staging', To: '  env: Production'}
+            - { From: '  #host: "localhost:5601"', To: '  host: "http://192.168.56.2:5601"'}
+            - { From: '  hosts: \["localhost:9200"\]', To: '  hosts: ["192.168.56.2:9200"]'}
+            - { From: '  #username: "elastic', To: '  username: "elastic'}
+            - { From: '  #password: "changeme"', To: '  password: "changeme"'}
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+            
+
+
+
+
